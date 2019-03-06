@@ -10,7 +10,7 @@ namespace MusicDB
 {
 
 	const int MAX_SONG_RECORDS = 8;  // define a max number of song records in database
-	string binary_database_file_name = "MyFavoriteSongs.db";  // defeine the database file name
+	string binary_database_file_name = "MyFavoriteSongs.db";  // define the database file name
 	int total_number_of_songs;  // integer to keep total number of songs in any time
 	Song all_songs [MAX_SONG_RECORDS];  // make an empty array for storing all songs
 	Song song_to_add;  // make a one-element structure for adding a new song
@@ -40,7 +40,7 @@ namespace MusicDB
 				}
 				catch (const exception & exc)
 				{
-					// silent catch
+					(void)exc;  // silent catch
 				}
 			}
 			file.close();  // close the file
@@ -49,6 +49,7 @@ namespace MusicDB
 		catch (const exception &exc)
 		{
 			cout << "Failed to load the music database: Failed to open file '" << binary_database_file_name << "'" << endl;  // if there is exception print the sentence defined in assginment
+			(void)exc;  // silent catch
 		}
 
 	}
@@ -72,10 +73,10 @@ namespace MusicDB
 
 		switch (all_songs[song_number].song_genre)  // decide which string to print as genre based on genre recorded in an array
 		{
-		case Blues: default: // to avoid an error, Blues (0) is default
+		case Blues:						 // cases are obvious
 			genre_string = "Blues";
 			break;
-		case Country:                    // other cases are obvious
+		case Country:                   
 			genre_string = "Country";
 			break;
 		case Electronic:
@@ -99,6 +100,9 @@ namespace MusicDB
 		case Rock:
 			genre_string = "Rock";
 			break;
+		default: // to avoid an error, Unknown (0) is default
+			genre_string = "Unknown";
+			break;
 		}                               // end of switch
 
 		cout << "  Genre:   " << genre_string << endl;  // print the genre selected
@@ -114,7 +118,7 @@ namespace MusicDB
 	// function that add a new song to the database
 	void addANewSongToTheDatabase()
 	{
-		std::string input_str;  // define the strign for taking the input
+		string input_str;  // define the strign for taking the input
 		there_is_a_new_song = false;  // set that there is currently not a new song
 
 		if (total_number_of_songs < MAX_SONG_RECORDS - 1)  // just if there is a space in the array (number of songs is lower than max - 1)
@@ -127,8 +131,7 @@ namespace MusicDB
 				if (input_str.length() > sizeof(song_to_add.song_title))  // if string is bigger than a predicted space
 					throw exception("Song title is to large! ");  // throw an exception
 				else  // in other case
-					for (int co = 0; co < input_str.length(); co++)  // transfer a string to a char array
-						song_to_add.song_title[co] = input_str[co];  // character by character
+					strcpy_s(song_to_add.song_title, input_str.c_str());  // copy a string to the song_tgitle char array structure
 
 				cout << "Enter artist: ";  // print to the user what type of data to enter
 				getline(cin >> ws, input_str);  // get the input string (with spaces if needed)
@@ -136,8 +139,7 @@ namespace MusicDB
 				if (input_str.length() > sizeof(song_to_add.artist_name))  // if string is bigger than a predicted space
 					throw exception("Artist name is to large! ");  // throw an exception
 				else  // in other case
-					for (int co = 0; co < input_str.length(); co++)  // transfer a string to a char array
-						song_to_add.artist_name[co] = input_str[co];  // character by character
+					strcpy_s(song_to_add.artist_name, input_str.c_str());  // copy a string to the artist_name char array structure
 
 				cout << "Enter album name: ";  // print to the user what type of data to enter
 				getline(cin >> ws, input_str);  // get the input string (with spaces if needed)
@@ -145,9 +147,8 @@ namespace MusicDB
 				if (input_str.length() > sizeof(song_to_add.album_name))  // if string is bigger than a predicted space
 					throw exception("Album name is to large! ");  // throw an exception
 				else  // in other case
-					for (int co = 0; co < input_str.length(); co++)  // transfer a string to a char array
-						song_to_add.album_name[co] = input_str[co];  // character by character
-
+					strcpy_s(song_to_add.album_name, input_str.c_str());  // copy a string to the album_name char array structure
+				
 				cout << "Enter track #: ";  // print to the user to enter the song's track number
 				getline(cin >> ws, input_str);  // get the input string 
 				try
@@ -157,6 +158,7 @@ namespace MusicDB
 				catch (const exception &exc)  // if something went wrong
 				{
 					throw exception("Wrong track number format! ");  // throw the exeption
+					(void)exc;  // silent catch
 				}
 
 				cout << "Enter year: ";  // print to the user to enter the song's year
@@ -168,13 +170,16 @@ namespace MusicDB
 				catch (const exception &exc)  // if something went wrong
 				{
 					throw exception("Wrong year format! ");  // throw the exeption
+					(void)exc;  // silent catch
 				}
 
 				cout << "Enter genre: ";  // print to the user to enter the song's genre
 				getline(cin >> ws, input_str); // get the input string 
 
-				song_to_add.song_genre = Blues; // set genre to default value (Blues=0) to avoid an error
-				if (input_str == "Country")                    // other cases are obvious
+				song_to_add.song_genre = Unknown; // set genre to default value (Unknown=0) to avoid an error
+				if (input_str == "Blues")                    // other cases are obvious
+					song_to_add.song_genre = Blues;
+				else if (input_str == "Country")
 					song_to_add.song_genre = Country;
 				else if (input_str == "Electronic")
 					song_to_add.song_genre = Electronic;
@@ -219,4 +224,4 @@ namespace MusicDB
 		return there_is_a_new_song;  // return the value of the boolean variable
 	}
 
-};
+}
