@@ -3,7 +3,7 @@
 // typedefs for music's genre
 typedef enum genre
 {
-	Blues, Country, Electronic, Folk, HipHop, Jazz, Latin, Pop, Rock
+	Unknown, Blues, Country, Electronic, Folk, HipHop, Jazz, Latin, Pop, Rock
 } _genre;
 
 // structure for every song
