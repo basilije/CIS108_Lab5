@@ -2,7 +2,7 @@
 #include <string>
 #include "conio.h"
 #include "MusicDB.h"
-
+//#define _CRT_SECURE_NO_WARNINGS
 
 using namespace std;
 string command_entered;
@@ -16,6 +16,7 @@ void printHelp()
 	cout << "help : Display a menu explaining the commands to the users " << endl;
 	cout << "exit : Exit the program " << endl << endl;
 }
+
 
 
 int main()
